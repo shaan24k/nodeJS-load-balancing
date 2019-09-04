@@ -4,20 +4,23 @@ Make multiple nodeJs instance and access on i.p / domain
 
 If A instance is busy then the request will go to B and B also busy then request move to C vice versa.
 
+Steps to be follow
 
-$ sudo nano /etc/nginx/sites-available/default  # Edit nginx default file and pase below code
-
-
-    upstream node_cluster {
-    server 127.0.0.1:3001;  #Node.js instance 1
-    server 127.0.0.1:3002;  #Node.js instance 2
-    server 127.0.0.1:3003;  #Node.js instance 3
-    }
+    1.  $ sudo nano /etc/nginx/sites-available/default  # Edit nginx default file and pase below code
 
 
-    server {
+
+    
+        upstream node_cluster {
+            server 127.0.0.1:3001;  #Node.js instance 1
+            server 127.0.0.1:3002;  #Node.js instance 2
+            server 127.0.0.1:3003;  #Node.js instance 3
+            }
+
+        server {
+            
             listen 80 default_server;
-
+             
             server_name localhost;
 
             location / {
@@ -29,11 +32,14 @@ $ sudo nano /etc/nginx/sites-available/default  # Edit nginx default file and pa
                     proxy_pass http://node_cluster/;
                     proxy_redirect off;
             }
+        }
 
 
-    }
 
 
-$ sudo service nginx restart  # restart the nginx for reflect the changes on server
+    2. $ sudo service nginx restart  # restart the nginx for reflect the changes on server
+    3. $ Run node server.js  # open the i.p/domain on browser refresh page multiple times port will change
+
+
  
-$ Run node server.js  # open the i.p/domain on browser refresh page multiple times port will change
+
