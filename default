@@ -1,0 +1,24 @@
+upstream node_cluster {
+  server 127.0.0.1:3001;  #Node.js instance 1
+  server 127.0.0.1:3002;  #Node.js instance 2
+  server 127.0.0.1:3003;  #Node.js instance 3
+}
+
+
+server {
+        listen 80 default_server;
+
+        server_name localhost;
+
+        location / {
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-NginX-Proxy true;
+
+                proxy_pass http://node_cluster/;
+                proxy_redirect off;
+        }
+
+
+}
